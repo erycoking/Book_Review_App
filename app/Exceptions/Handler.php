@@ -46,6 +46,54 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+
+        $httpCode = $exception->getCode();
+
+        if($httpCode == 500){
+            return response()->json([
+                'error' => 'internal error'
+            ], 500);
+        }
+
+        if($httpCode == 400){
+            return response()->json([
+                'error' => 'Bad request'
+            ], 400);
+        }
+
+        if($httpCode == 401){
+            return response()->json([
+                'error' => 'Unauthorized'
+            ], 401);
+        }
+
+        if($httpCode == 405){
+            return response()->json([
+                'error' => 'Method Not Allowed'
+            ], 405);
+        }
+
+        if($httpCode >= 403 && $httpCode <= 499){
+            return response()->json([
+                'error' => 'Bad request'
+            ], 403);
+        }
+
+
+        // This will replace our 404 response with
+        // a JSON response.
+        if ($exception instanceof ModelNotFoundException && $request->wantsJson()) {
+            return response()->json([
+                'error' => 'Resource not found'
+            ], 404);
+        }
+
+        if ($exception instanceof MethodNotAllowedHttpException && $request->wantsJson()) {
+            return response()->json([
+                'error' => 'Method Not Allowed'
+            ], 405);
+        }
+
         return parent::render($request, $exception);
     }
 }
