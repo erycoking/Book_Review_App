@@ -1,4 +1,5 @@
 <?php
+use Illuminate\View\View;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,17 +13,8 @@
 */
 
 
-Route::get('/', function () { return response()->json(['data'=> 'welcome to book review api'], 200); });
-Route::post('register', 'AuthController@register')->name('api.register');
-Route::post('login', 'AuthController@login')->name('api.login');
-Route::apiResource('books', 'BookController');
-Route::post('books/{book}/ratings', 'RatingController@store')->name('rating.store');
-// Route::fallback(function(){
-//     return response()->json([
-//         'message' => 'Page Not Found. If error persists, contact info@website.com'], 404);
-// });
-
-
-
+Route::get('{any}', function () {
+    return view('welcome');
+})->where('any', '.*');
 
 

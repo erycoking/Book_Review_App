@@ -25,7 +25,7 @@ class BookController extends Controller
     public function index()
     {
         $books = Book::with(['user', 'ratings']);
-        return (BookResource::collection($books->paginate(15)))->response()->setStatusCode(200);
+        return (BookResource::collection($books->orderBy('id', 'desc')->paginate(15)))->response()->setStatusCode(200);
     }
 
     /**

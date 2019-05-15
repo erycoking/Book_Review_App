@@ -13,6 +13,23 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::group(['prefix' => 'auth'], function ($router) {
+    Route::post('register', 'AuthController@register')->name('api.register');
+    Route::post('login', 'AuthController@login')->name('api.login');
+    Route::post('refresh', 'AuthController@refresh')->name('api.refresh');
+    Route::post('me', 'AuthController@me')->name('api.me');
+
+    Route::fallback(function(){
+        return response()->json([
+            'message' => 'Page Not Found. If error persists, contact info@website.com'], 404);
+    });
+});
+
+
+Route::apiResource('books', 'BookController');
+Route::post('books/{book}/ratings', 'RatingController@store')->name('rating.store');
+Route::fallback(function(){
+    return response()->json([
+        'message' => 'Page Not Found. If error persists, contact info@website.com'], 404);
 });
