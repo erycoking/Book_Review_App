@@ -15,7 +15,7 @@ import Home from './components/Home.vue';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Navbar from './components/Navbar.vue';
-import Book from './components/Book.vue';
+import Book from './components/Books/Main.vue';
 import StoreData from './store';
 import { routes } from './routes';
 import {initialize} from './helpers/initializer';

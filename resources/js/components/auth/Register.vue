@@ -5,12 +5,13 @@
                 <div class="card-header">Sign Up</div>
                 <div class="card-body mr-5 ml-5">
                     <form @submit.prevent="register">
-                        <p class="bg-danger pt-2 pb-2 pl-2 pr-2" v-if="errors.length">
-                          <b>Please correct the following error(s):</b>
+                        <div class="bg-danger pt-2 pb-2 pl-2 pr-2" v-if="errors">
                           <ul>
-                            <li v-for="error in errors">{{ error }}</li>
+                              <li v-for="(fieldsError, fieldName) in errors" :key="fieldName">
+                                  <strong>{{ fieldName }} : </strong> {{ fieldsError.join('\n') }}
+                              </li>
                           </ul>
-                        </p>
+                        </div>
                         <div class="form-group row">
                           <label for="email">Email: </label>
                           <input type="text" v-model="form.name" id="name" class="form-control" placeholder="Enter name" aria-describedby="nameId">
@@ -43,6 +44,7 @@
 
 <script>
 import { register } from '../../helpers/auth';
+import validate from 'validate.js';
 
 export default {
     name: 'register',
@@ -54,41 +56,56 @@ export default {
                 password: '',
                 cpassword: ''
             },
-            errors: []
+            errors: null
         }
     },
     methods: {
-        checkForm(e) {
-            if(this.$data.form.name && this.$data.form.email && this.$data.form.password && this.$data.form.cpassword)
-                return true;
-
-            this.$data.errors = [];
-
-            if(!this.$data.form.name)
-                this.$data.errors.push("Name required.");
-
-            if(!this.$data.form.email)
-                this.$data.errors.push("Email required.");
-
-            if(!this.$data.form.password)
-                this.$data.errors.push("password required.");
-
-            if(this.$data.form.password !== this.$data.form.cpassword)
-                this.$data.errors.push("passwords do not match.");
-
-        },
         register() {
-            if (this.checkForm()) {
-                this.$store.commit('login');
+            this.errors = null;
+            const constraints = this.getConstraints();
 
-                register(this.$data.form)
-                    .then((res) => {
-                        this.$store.commit('loginSuccess', res);
-                        this.$router.push('/')
-                    }).
-                    catch((error) => {
-                        this.$store.commit('loginFailed', error);
-                    });
+            const errors = validate(this.$data.form, constraints);
+
+            if(errors){
+                this.errors = errors;
+                return;
+            }
+
+            this.$store.commit('login');
+
+            register(this.$data.form)
+                .then((res) => {
+                    this.$store.commit('loginSuccess', res);
+                    this.$router.push('/')
+                }).
+                catch((error) => {
+                    this.$store.commit('loginFailed', error);
+                });
+        },
+        getConstraints(){
+            return {
+                name: {
+                    presence: true,
+                    length: {
+                        minimum: 8,
+                        message: 'Must be atleast 8 characters long'
+                    }
+                },
+                email: {
+                    presence: true,
+                    email: true
+                },
+                password: {
+                    presence: true,
+                    length: {
+                        minimum: 8,
+                        message: 'Must be atleast 8 characters long'
+                    }
+                },
+                cpassword: {
+                    presence: true,
+                    equality: 'password'
+                }
             }
         }
     },
@@ -101,8 +118,5 @@ export default {
 </script>
 
 <style scoped>
-    .error {
-        text-align: center;
-        color: red;
-    }
+
 </style>

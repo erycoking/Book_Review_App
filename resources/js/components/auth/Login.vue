@@ -5,10 +5,15 @@
                 <div class="card-header">Login</div>
                 <div class="card-body mr-5 ml-5">
                     <form @submit.prevent="authenticate">
-                        <div class="form-group row" v-if="authError">
-                          <p class="error">
-                              {{ authError }}
-                          </p>
+                        <div class="bg-danger pt-2 pb-2 pl-2 pr-2" v-if="errors">
+                          <ul>
+                              <li v-for="(fieldsError, fieldName) in errors" :key="fieldName">
+                                  <strong>{{ fieldName }} : </strong> {{ fieldsError.join('\n') }}
+                              </li>
+                          </ul>
+                        </div>
+                        <div class="bg-danger pt-2 pb-2 pl-2 pr-2" v-if="authError">
+                          <p>{{ authError }}</p>
                         </div>
                         <div class="form-group row">
                           <label for="email">Email: </label>
@@ -34,6 +39,7 @@
 <script>
 import { login } from '../../helpers/auth';
 import store from '../../store';
+import validate from 'validate.js';
 
 export default {
     name: 'login',
@@ -43,11 +49,21 @@ export default {
                 email: '',
                 password: ''
             },
-            error: null
+            errors: null
         };
     },
     methods: {
         authenticate(){
+            this.errors = null;
+            const constraints = this.getConstraints();
+
+            const errors = validate(this.$data.form, constraints);
+
+            if(errors){
+                this.errors = errors;
+                return;
+            }
+
             this.$store.dispatch('login');
 
             login(this.$data.form)
@@ -58,6 +74,17 @@ export default {
                 .catch((error) => {
                     this.$store.commit('loginFailed', {error});
                 });
+        },
+        getConstraints(){
+            return {
+                email: {
+                    presence: true,
+                    email: true
+                },
+                password: {
+                    presence: true
+                }
+            }
         }
     },
     computed: {
@@ -70,9 +97,6 @@ export default {
 
 
 <style scoped>
-.error {
-    text-align: center;
-    color: red;
-}
+
 </style>
 

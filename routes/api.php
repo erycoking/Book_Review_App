@@ -19,16 +19,13 @@ Route::group(['prefix' => 'auth'], function ($router) {
     Route::post('login', 'AuthController@login')->name('api.login');
     Route::post('refresh', 'AuthController@refresh')->name('api.refresh');
     Route::post('me', 'AuthController@me')->name('api.me');
-
-    Route::fallback(function(){
-        return response()->json([
-            'message' => 'Page Not Found. If error persists, contact info@website.com'], 404);
-    });
 });
 
+Route::group(['middleware' => 'jwt.auth'], function ($router) {
+    Route::apiResource('books', 'BookController');
+    Route::post('books/{book}/ratings', 'RatingController@store')->name('rating.store');
+});
 
-Route::apiResource('books', 'BookController');
-Route::post('books/{book}/ratings', 'RatingController@store')->name('rating.store');
 Route::fallback(function(){
     return response()->json([
         'message' => 'Page Not Found. If error persists, contact info@website.com'], 404);

@@ -8,7 +8,7 @@ export default {
         isLoggedIn: !!user,
         loading: false,
         auth_error: null,
-        users: []
+        books: []
     },
     getters: {
         isLoading(state){
@@ -23,8 +23,8 @@ export default {
         authError(state){
             return state.auth_error;
         },
-        users(state){
-            return state.users;
+        books(state){
+            return state.books;
         }
     },
     mutations: {
@@ -36,7 +36,7 @@ export default {
             state.auth_error = null;
             state.isLoggedIn = true;
             state.loading = false;
-            state.currentUser = Object.assign({}, payload.user, {token: payload.token});
+            state.currentUser = Object.assign({}, payload.user, {token: payload.access_token});
 
             localStorage.setItem('user', JSON.stringify(state.currentUser));
         },
@@ -49,11 +49,27 @@ export default {
             localStorage.removeItem("user");
             state.isLoggedIn = false;
             state.currentUser = null;
+        },
+        updateBooks(state, payload){
+            state.books = payload;
         }
     },
     actions: {
         login(context){
             context.commit('login');
+        },
+        getBooks(context){
+            axios.get('/api/books', {
+                headers: {
+                    "Authorization": `Bearer ${context.state.currentUser.token}`
+                }
+            })
+            .then((res) => {
+                context.commit('updateBooks', res.data.data);
+            }).
+            catch((err) => {
+                console.log(err);
+            });
         }
     }
 }
