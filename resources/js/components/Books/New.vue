@@ -10,7 +10,10 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="form-group row bg-success" v-if="msg">
+                   <div class="bg-danger pt-2 pb-2 pl-2 pr-2" v-if="backend_error">
+                        <p>{{ backend_error.error }}</p>
+                    </div>
+                    <div class="bg-success pt-2 pb-2 pl-2 pr-2" v-if="msg">
                         <p>{{ msg }}</p>
                     </div>
                     <div class="form-group row">
@@ -51,6 +54,7 @@ export default {
                 description: ''
             },
             cover_img: null,
+            backend_error: null,
             errors: null,
             msg: null
         };
@@ -96,7 +100,8 @@ export default {
                 this.$data.book.title = ''
                 this.$data.book.description = ''
             }).catch((err) => {
-                this.errors = err;
+                console.log(err.response.data);
+                this.$data.backend_error = err.response.data;
             });
         },
         getConstraints() {

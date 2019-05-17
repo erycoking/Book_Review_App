@@ -1899,6 +1899,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'new',
@@ -1909,6 +1912,7 @@ __webpack_require__.r(__webpack_exports__);
         description: ''
       },
       cover_img: null,
+      backend_error: null,
       errors: null,
       msg: null
     };
@@ -1954,7 +1958,8 @@ __webpack_require__.r(__webpack_exports__);
         _this.$data.book.title = '';
         _this.$data.book.description = '';
       })["catch"](function (err) {
-        _this.errors = err;
+        console.log(err.response.data);
+        _this.$data.backend_error = err.response.data;
       });
     },
     getConstraints: function getConstraints() {
@@ -2040,6 +2045,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'new',
@@ -2069,6 +2077,7 @@ __webpack_require__.r(__webpack_exports__);
         description: ''
       },
       errors: null,
+      backend_error: null,
       msg: null
     };
   },
@@ -2099,7 +2108,8 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (res) {
         _this2.msg = 'Review successfully saved';
       })["catch"](function (err) {
-        _this2.errors = err;
+        console.log(err.response.data);
+        _this2.$data.backend_error = err.response.data;
       });
     },
     getConstraints: function getConstraints() {
@@ -2173,6 +2183,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'update',
@@ -2184,7 +2197,11 @@ __webpack_require__.r(__webpack_exports__);
         "Authorization": "Bearer ".concat(this.currentUser.token)
       }
     }).then(function (res) {
-      _this.$data.book = res.data.data;
+      var retrieved_book = res.data.data;
+      _this.$data.book = {
+        title: retrieved_book.title,
+        description: retrieved_book.description
+      };
     })["catch"](function (err) {
       alert('error loading book');
 
@@ -2198,6 +2215,7 @@ __webpack_require__.r(__webpack_exports__);
         description: ''
       },
       errors: null,
+      backend_error: null,
       msg: null
     };
   },
@@ -2217,20 +2235,19 @@ __webpack_require__.r(__webpack_exports__);
       if (errors) {
         this.errors = errors;
         return;
-      } //send the book data to the backend api
+      }
 
+      console.log(this.$data.book); //send the book data to the backend api
 
-      axios.put("/api/books/".concat(this.$data.book.id), this.$data.book, {
+      axios.put("/api/books/".concat(this.$route.params.id), this.$data.book, {
         headers: {
-          "Authorization": "Bearer ".concat(this.currentUser.token),
-          'Content-Type': 'application/x-www-form-urlencoded'
+          "Authorization": "Bearer ".concat(this.currentUser.token)
         }
       }).then(function (res) {
         _this2.msg = 'Book saved added';
       })["catch"](function (err) {
-        _this2.errors = [{
-          'error': 'something went wrong'
-        }];
+        console.log(err.response.data);
+        _this2.$data.backend_error = err.response.data;
       });
     },
     getConstraints: function getConstraints() {
@@ -40057,8 +40074,14 @@ var render = function() {
                 ])
               : _vm._e(),
             _vm._v(" "),
+            _vm.backend_error
+              ? _c("div", { staticClass: "bg-danger pt-2 pb-2 pl-2 pr-2" }, [
+                  _c("p", [_vm._v(_vm._s(_vm.backend_error.error))])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
             _vm.msg
-              ? _c("div", { staticClass: "form-group row bg-success" }, [
+              ? _c("div", { staticClass: "bg-success pt-2 pb-2 pl-2 pr-2" }, [
                   _c("p", [_vm._v(_vm._s(_vm.msg))])
                 ])
               : _vm._e(),
@@ -40263,8 +40286,14 @@ var render = function() {
                 ])
               : _vm._e(),
             _vm._v(" "),
+            _vm.backend_error
+              ? _c("div", { staticClass: "bg-danger pt-2 pb-2 pl-2 pr-2" }, [
+                  _c("p", [_vm._v(_vm._s(_vm.backend_error.error))])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
             _vm.msg
-              ? _c("div", { staticClass: "form-group row bg-success" }, [
+              ? _c("div", { staticClass: "bg-success pt-2 pb-2 pl-2 pr-2" }, [
                   _c("p", [_vm._v(_vm._s(_vm.msg))])
                 ])
               : _vm._e(),
@@ -40443,8 +40472,14 @@ var render = function() {
                 ])
               : _vm._e(),
             _vm._v(" "),
+            _vm.backend_error
+              ? _c("div", { staticClass: "bg-danger pt-2 pb-2 pl-2 pr-2" }, [
+                  _c("p", [_vm._v(_vm._s(_vm.backend_error.error))])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
             _vm.msg
-              ? _c("div", { staticClass: "form-group row bg-success" }, [
+              ? _c("div", { staticClass: "bg-success pt-2 pb-2 pl-2 pr-2" }, [
                   _c("p", [_vm._v(_vm._s(_vm.msg))])
                 ])
               : _vm._e(),

@@ -10,7 +10,10 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="form-group row bg-success" v-if="msg">
+                    <div class="bg-danger pt-2 pb-2 pl-2 pr-2" v-if="backend_error">
+                        <p>{{ backend_error.error }}</p>
+                    </div>
+                    <div class="bg-success pt-2 pb-2 pl-2 pr-2" v-if="msg">
                         <p>{{ msg }}</p>
                     </div>
                     <div class="form-group row">
@@ -46,7 +49,11 @@ export default {
             }
         })
         .then((res) => {
-            this.$data.book = res.data.data;
+            var retrieved_book = res.data.data
+            this.$data.book = {
+                title: retrieved_book.title,
+                description: retrieved_book.description
+            };
         })
         .catch((err) => {
             alert('error loading book');
@@ -60,6 +67,7 @@ export default {
                 description: ''
             },
             errors: null,
+            backend_error: null,
             msg: null
         };
     },
@@ -79,18 +87,19 @@ export default {
                 this.errors = errors;
                 return;
             }
+            console.log(this.$data.book);
 
             //send the book data to the backend api
-            axios.put(`/api/books/${this.$data.book.id}`, this.$data.book, {
+            axios.put(`/api/books/${this.$route.params.id}`, this.$data.book, {
                 headers: {
-                    "Authorization": `Bearer ${this.currentUser.token}`,
-                    'Content-Type' : 'application/x-www-form-urlencoded'
+                    "Authorization": `Bearer ${this.currentUser.token}`
                 }
             })
             .then((res) => {
                 this.msg = 'Book saved added';
             }).catch((err) => {
-                this.errors = [{'error':'something went wrong'}];
+                console.log(err.response.data);
+                this.$data.backend_error = err.response.data;
             });
         },
         getConstraints() {

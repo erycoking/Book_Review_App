@@ -26,7 +26,7 @@ class RatingController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => 'rating is required'], 400);
+            return response()->json(['error' => 'rating and rating are both required'], 400);
         }
 
         $user = Auth::user();
@@ -36,12 +36,15 @@ class RatingController extends Controller
             return response()->json(['error' => 'book is required'], 400);
         }
 
-        $rating = Rating::firstOrCreate(
+        $rating = Rating::updateOrCreate(
             [
                 'user_id' => $user->id,
                 'book_id' => $book->id,
             ],
-            ['rating' => $request->rating]
+            [
+                'rating' => $request->rating,
+                'review' => $request->review
+            ]
         );
 
         return (new RatingResource($rating))->response()->setStatusCode(200);
