@@ -18,6 +18,8 @@ class CreateBooksTable extends Migration
             $table->unsignedInteger('user_id');
             $table->string('title');
             $table->text('description');
+            $table->string('cover_img');
+            $table->string('book');
             $table->timestamps();
         });
     }

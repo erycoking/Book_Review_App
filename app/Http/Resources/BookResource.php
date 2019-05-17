@@ -14,14 +14,19 @@ class BookResource extends JsonResource
      */
     public function toArray($request)
     {
+        $user = $this->user;
+        $user->passport_img = '/storage/passport_images/'.$this->user->passport_img;
+
         return [
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
+            'cover_img' => '/storage/cover_images/'.$this->cover_img,
+            'book' => '/storage/books/'.$this->book,
             'average_rating' => $this->ratings->avg('rating'),
             'created_at' => (string) $this->created_at,
             'updated_at' => (string) $this->updated_at,
-            'user' => $this->user,
+            'user' => $user,
             'ratings' => $this->ratings,
           ];
     }

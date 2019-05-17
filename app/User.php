@@ -17,7 +17,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'passport_img'
     ];
 
     /**
@@ -42,7 +42,7 @@ class User extends Authenticatable implements JWTSubject
     {
       return $this->hasMany(Book::class);
     }
-    
+
     public function getJWTIdentifier()
     {
       return $this->getKey();

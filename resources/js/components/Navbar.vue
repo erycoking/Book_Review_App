@@ -10,11 +10,6 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <!-- <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <router-link class="nav-link" to="/">Home</router-link>
-        </li>
-      </ul> -->
       <ul class="navbar-nav ml-auto">
         <template v-if="!currentUser">
             <li class="nav-item">
@@ -30,7 +25,7 @@
             </li>
             <li class="nav-item dropdown">
                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
-                    {{ currentUser.name }} <span class="caret"></span>
+                   welcome {{ currentUser.name }} <span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a href="#!" @click.prevent="logout" class="dropdown-item">Logout</a>

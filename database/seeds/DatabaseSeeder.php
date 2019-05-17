@@ -15,11 +15,11 @@ class DatabaseSeeder extends Seeder
         $users->each(function ($user) {
             $books = $user
                 ->books()
-                ->saveMany(factory(App\Book::class, 5)->make());
+                ->saveMany(factory(App\Book::class, 3)->make());
             $books->each(function ($book) {
                 $book
                     ->ratings()
-                    ->saveMany(factory(App\Rating::class, 10)->make());
+                    ->saveMany(factory(App\Rating::class, 3)->make());
             });
         });
     }

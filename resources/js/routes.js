@@ -5,6 +5,8 @@ import BooksMain from './components/Books/Main.vue';
 import BooksList from './components/Books/List.vue';
 import NewBook from './components/Books/New.vue';
 import Book from './components/Books/View.vue';
+import EditBook from './components/Books/Update.vue';
+import BookReview from './components/Books/Review.vue';
 
 /**
  * defining all tha routes
@@ -35,6 +37,14 @@ export const routes = [
             {
                 path: ':id',
                 component: Book
+            },
+            {
+                path: ':id/edit',
+                component: EditBook
+            },
+            {
+                path: ':id/review',
+                component: BookReview
             }
         ]
     },

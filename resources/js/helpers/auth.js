@@ -14,13 +14,17 @@ export function login(credentials){
 
 export function register(user_data){
     return new Promise((res, rej)=>{
-        axios.post('/api/auth/register', user_data)
-            .then((response)=>{
-                res(response.data);
-            })
-            .catch((error) => {
-                rej(error);
-            });
+        axios.post('/api/auth/register', user_data, {
+            headers: {
+                'Content-Type' : 'multipart/form-data'
+            }
+        })
+        .then((response)=>{
+            res(response.data);
+        })
+        .catch((error) => {
+            rej(error);
+        });
     });
 }
 

@@ -13,7 +13,7 @@
                           </ul>
                         </div>
                         <div class="form-group row">
-                          <label for="email">Email: </label>
+                          <label for="name">Name: </label>
                           <input type="text" v-model="form.name" id="name" class="form-control" placeholder="Enter name" aria-describedby="nameId">
                           <small id="nameId" class="text-muted">Enter your name</small>
                         </div>
@@ -31,6 +31,11 @@
                           <label for="cpassword">Confirm Password: </label>
                           <input type="password" v-model="form.cpassword" id="cpassword" class="form-control" placeholder="Confirm Password" aria-describedby="cpasswordId">
                           <small id="cpasswordId" class="text-muted">Confirm your password</small>
+                        </div>
+                         <div class="form-group row">
+                          <label for="passport">Passport photo: </label>
+                          <input type="file" accept="image/*"  id="passport" @change="onFileChange" class="form-control" aria-describedby="passportId">
+                          <small id="passportId" class="text-muted">Upload passport photo</small>
                         </div>
                         <div class="form-group row">
                           <input type="submit" value="Sign Up" class="btn btn-primary">
@@ -56,10 +61,14 @@ export default {
                 password: '',
                 cpassword: ''
             },
+            passport_img: null,
             errors: null
         }
     },
     methods: {
+        onFileChange(){
+            this.$data.passport_img = event.target.files[0];
+        },
         register() {
             this.errors = null;
             const constraints = this.getConstraints();
@@ -71,9 +80,18 @@ export default {
                 return;
             }
 
+            const formData = new FormData();
+            Object.keys(this.$data.form).forEach((key, index) =>{
+                formData.append(key, this.$data.form[key]);
+            });
+
+            if(this.$data.passport_img){
+                formData.append('passport_img', this.$data.passport_img, this.$data.passport_img.name);
+            }
+
             this.$store.commit('login');
 
-            register(this.$data.form)
+            register(formData)
                 .then((res) => {
                     this.$store.commit('loginSuccess', res);
                     this.$router.push('/')
@@ -87,8 +105,8 @@ export default {
                 name: {
                     presence: true,
                     length: {
-                        minimum: 8,
-                        message: 'Must be atleast 8 characters long'
+                        minimum: 3,
+                        message: 'Must be atleast 3 characters long'
                     }
                 },
                 email: {

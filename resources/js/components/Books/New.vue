@@ -10,7 +10,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="form-group row" v-if="msg">
+                    <div class="form-group row bg-success" v-if="msg">
                         <p>{{ msg }}</p>
                     </div>
                     <div class="form-group row">
@@ -20,8 +20,13 @@
                     </div>
                     <div class="form-group row">
                         <label for="description">Description: </label>
-                        <input type="text" v-model="book.description" id="description" class="form-control" placeholder="Enter description" aria-describedby="descriptionId">
+                        <textarea type="text" cols="30" rows="7" v-model="book.description" id="description" class="form-control" placeholder="Enter description" aria-describedby="descriptionId"></textarea>
                         <small id="titleId" class="text-muted">Enter book description</small>
+                    </div>
+                    <div class="form-group row">
+                        <label for="cover_img">Cover image: </label>
+                        <input type="file" accept="image/*"  id="cover_img" @change="onImageChange" class="form-control" aria-describedby="cover_imgId">
+                        <small id="cover_imgId" class="text-muted">Upload book cover image</small>
                     </div>
                     <div class="form-group row">
                         <input type="submit" value="Add Book" class="btn btn-primary">
@@ -45,6 +50,7 @@ export default {
                 title: '',
                 description: ''
             },
+            cover_img: null,
             errors: null,
             msg: null
         };
@@ -55,6 +61,9 @@ export default {
         }
     },
     methods: {
+        onImageChange(){
+            this.$data.cover_img = event.target.files[0];
+        },
         add() {
             this.errors = null;
             const constraints = this.getConstraints();
@@ -66,10 +75,20 @@ export default {
                 return;
             }
 
+            const formData = new FormData();
+            Object.keys(this.$data.book).forEach((key, index) =>{
+                formData.append(key, this.$data.book[key]);
+            });
+
+            if(this.$data.cover_img){
+                formData.append('cover_img', this.$data.cover_img, this.$data.cover_img.name);
+            }
+
             //send the book data to the backend api
-            axios.post("/api/books", this.$data.book, {
+            axios.post("/api/books", formData, {
                 headers: {
-                    "Authorization": `Bearer ${this.currentUser.token}`
+                    "Authorization": `Bearer ${this.currentUser.token}`,
+                    'Content-Type' : 'multipart/form-data'
                 }
             })
             .then((res) => {

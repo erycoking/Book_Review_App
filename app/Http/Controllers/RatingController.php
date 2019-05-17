@@ -21,7 +21,8 @@ class RatingController extends Controller
     {
         //Validate
         $validator = Validator::make($request->all(), [
-            'rating' => 'required'
+            'rating' => 'required',
+            'review' => 'required|min:10'
         ]);
 
         if ($validator->fails()) {
