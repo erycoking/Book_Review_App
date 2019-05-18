@@ -21,6 +21,9 @@
 </template>
 
 <script>
+/**
+ * defining home page
+ */
     export default {
         name: 'home'
     }

@@ -38,6 +38,12 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * defing a relationship with the books table
+     *
+     * a user may have many books
+     * One to Many Relation
+     */
     public function books()
     {
       return $this->hasMany(Book::class);

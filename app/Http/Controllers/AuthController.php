@@ -7,18 +7,33 @@ use App\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * controller for handling user registration and authentication
+ */
 class AuthController extends Controller
 {
 
+    /**
+     * adding  auth middleware
+     */
     public function __construct()
     {
         $this->middleware('auth:api', ['except'=>['login', 'register']]);
     }
 
+    /**
+     * new user registration
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function register(Request $request)
     {
+        // get allowed max file size
         $max_size = (int)ini_get('upload_max_filesize') * 1000;
 
+        // defining validation rules
         $validator = Validator::make($request->all(), [
             'email' =>  'required|email|max:255|unique:users',
             'name' => 'required|string|max:255',
@@ -26,6 +41,7 @@ class AuthController extends Controller
             'passport_img'=>'image|nullable|max:' . $max_size
             ]);
 
+        // test validation
         if ($validator->fails()) {
             return response()->json(['error' => 'bad request'], 400);
         }
@@ -47,6 +63,7 @@ class AuthController extends Controller
             $fileNameToStore = 'no_profile_pic.jpg';
         }
 
+        // creaye new user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -54,47 +71,82 @@ class AuthController extends Controller
             'passport_img' => $fileNameToStore
         ]);
 
+        // login new user
         $token = auth('api')->login($user);
 
+        // return responce object
         return $this->respondWithToken($token);
     }
 
+    /**
+     * get current user object
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function me()
     {
-        return response()->json(auth('api')->user());
+        return response()->json(auth('api')->user())->setStatusCode(200);
     }
 
+    /**
+     * login user
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function login(Request $request)
     {
 
-        //Validate fields
+        // defining validation rules
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required'
         ]);
+
+        // test validation
         if ($validator->fails()) {
             return response()->json(['error' => 'email and password is required'], 400);
         }
 
+        // get credentials
         $credentials = $request->only(['email', 'password']);
 
+        // login user
         if (!$token = auth('api')->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
+        // return token
         return $this->respondWithToken($token);
     }
 
+    /**
+     * logout current user.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function logout(){
         auth('api')->logout();
         return response()->json(['message'=> 'Successfully Logged out']);
     }
 
+    /**
+     * get refresh token
+     * @return \Illuminate\Http\Response
+     */
     public function refresh()
     {
         return $this->respondWithToken(auth()->refresh());
     }
 
+    /**
+     * creates a json resource
+     *
+     * @param  String  $token
+     *
+     * @return \Illuminate\Http\Response
+     */
     protected function respondWithToken($token)
     {
         $user = $this->guard()->user();
@@ -108,6 +160,9 @@ class AuthController extends Controller
         ])->setStatusCode(200);
     }
 
+    /**
+     * defining api guard.
+     */
     public function guard(){
         return Auth::Guard('api');
     }

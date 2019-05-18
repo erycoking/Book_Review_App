@@ -11,7 +11,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        /**
+         * generating 50 fake users
+         */
         $users = factory(App\User::class, 50)->create();
+
+        /**
+         * for each create 3 books and 3 ratings
+         */
         $users->each(function ($user) {
             $books = $user
                 ->books()

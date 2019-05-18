@@ -48,9 +48,13 @@ import { login } from '../../helpers/auth';
 import store from '../../store';
 import validate from 'validate.js';
 
+/**
+ * login component
+ */
 export default {
     name: 'login',
     data() {
+        // defining attributes
         return {
             form: {
                 email: '',
@@ -60,19 +64,28 @@ export default {
         };
     },
     methods: {
+        /**
+         * authenticates user
+         */
         authenticate(){
+            // ressetting errors to null
             this.errors = null;
+            // getting constraints
             const constraints = this.getConstraints();
 
+            // validating user data
             const errors = validate(this.$data.form, constraints);
 
+            // checking for errors
             if(errors){
                 this.errors = errors;
                 return;
             }
 
+            // calling login mutation
             this.$store.dispatch('login');
 
+            // login user
             login(this.$data.form)
                 .then((res) => {
                     this.$store.commit('loginSuccess', res);
@@ -82,6 +95,9 @@ export default {
                     this.$store.commit('loginFailed', {error});
                 });
         },
+        /**
+         * defining validation constraints
+         */
         getConstraints(){
             return {
                 email: {
@@ -95,6 +111,9 @@ export default {
         }
     },
     computed: {
+        /**
+         * getting authentication errors
+         */
         authError(){
             return this.$store.getters.authError;
         }

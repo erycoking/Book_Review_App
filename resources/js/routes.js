@@ -9,7 +9,7 @@ import EditBook from './components/Books/Update.vue';
 import BookReview from './components/Books/Review.vue';
 
 /**
- * defining all tha routes
+ * defining all the routes
  */
 export const routes = [
     {

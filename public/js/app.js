@@ -1797,6 +1797,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
+/**
+ * defining list component for displaying books
+ */
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'list',
   mounted: function mounted() {
@@ -1808,6 +1812,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   computed: {
+    /**
+     * get all books in the database
+     */
     books: function books() {
       return this.$store.getters.books;
     }
@@ -1841,6 +1848,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
+/**
+ * defining main componeny
+ */
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'books-main'
 });
@@ -1905,6 +1916,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'new',
+
+  /**
+   * defining user attributes
+   */
   data: function data() {
     return {
       book: {
@@ -1918,30 +1933,44 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   computed: {
+    /**
+     * getting current user
+     */
     currentUser: function currentUser() {
       return this.$store.getters.currentUser;
     }
   },
   methods: {
+    /**
+     * handling uploaded image
+     */
     onImageChange: function onImageChange() {
       this.$data.cover_img = event.target.files[0];
     },
+
+    /**
+     * saving new book
+     */
     add: function add() {
       var _this = this;
 
-      this.errors = null;
-      var constraints = this.getConstraints();
-      var errors = validate_js__WEBPACK_IMPORTED_MODULE_0___default()(this.$data.book, constraints);
+      // ressetting errors
+      this.errors = null; // getting defined constraintss
+
+      var constraints = this.getConstraints(); // validating user input
+
+      var errors = validate_js__WEBPACK_IMPORTED_MODULE_0___default()(this.$data.book, constraints); // checking for errors
 
       if (errors) {
         this.errors = errors;
         return;
-      }
+      } // adding user inputs to formdata object
+
 
       var formData = new FormData();
       Object.keys(this.$data.book).forEach(function (key, index) {
         formData.append(key, _this.$data.book[key]);
-      });
+      }); // checking for uploaded image
 
       if (this.$data.cover_img) {
         formData.append('cover_img', this.$data.cover_img, this.$data.cover_img.name);
@@ -1962,6 +1991,10 @@ __webpack_require__.r(__webpack_exports__);
         _this.$data.backend_error = err.response.data;
       });
     },
+
+    /**
+     * defining validation constraints
+     */
     getConstraints: function getConstraints() {
       return {
         title: {
@@ -2051,6 +2084,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'new',
+
+  /**
+   * fetching book to be reviewed
+   */
   created: function created() {
     var _this = this;
 
@@ -2066,6 +2103,10 @@ __webpack_require__.r(__webpack_exports__);
       _this.$router.push("".concat(_this.route.params.id));
     });
   },
+
+  /**
+   * defining page attributes
+   */
   data: function data() {
     return {
       form: {
@@ -2082,18 +2123,26 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   computed: {
+    /**
+     * getting current user
+     */
     currentUser: function currentUser() {
       return this.$store.getters.currentUser;
     }
   },
   methods: {
+    /**
+     * saving review
+     */
     add: function add() {
       var _this2 = this;
 
-      this.errors = null;
-      var constraints = this.getConstraints();
-      var errors = validate_js__WEBPACK_IMPORTED_MODULE_0___default()(this.$data.form, constraints);
-      console.log(errors);
+      // ressetting errors
+      this.errors = null; // getting defined constraints
+
+      var constraints = this.getConstraints(); // validating user inputs
+
+      var errors = validate_js__WEBPACK_IMPORTED_MODULE_0___default()(this.$data.form, constraints); // checking for errors
 
       if (errors) {
         this.errors = errors;
@@ -2112,6 +2161,10 @@ __webpack_require__.r(__webpack_exports__);
         _this2.$data.backend_error = err.response.data;
       });
     },
+
+    /**
+     * defining validation constraints
+     */
     getConstraints: function getConstraints() {
       return {
         rating: {
@@ -2189,6 +2242,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'update',
+
+  /**
+   * fetching book to be updated
+   */
   created: function created() {
     var _this = this;
 
@@ -2208,6 +2265,10 @@ __webpack_require__.r(__webpack_exports__);
       _this.$router.push("".concat(_this.route.params.id));
     });
   },
+
+  /**
+   * page attributes
+   */
   data: function data() {
     return {
       book: {
@@ -2220,24 +2281,32 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   computed: {
+    /**
+     * getting current user
+     */
     currentUser: function currentUser() {
       return this.$store.getters.currentUser;
     }
   },
   methods: {
+    /**
+     * updating book
+     */
     save: function save() {
       var _this2 = this;
 
-      this.errors = null;
-      var constraints = this.getConstraints();
-      var errors = validate_js__WEBPACK_IMPORTED_MODULE_0___default()(this.$data.book, constraints);
+      // ressetting error
+      this.errors = null; // getting defined constraints
+
+      var constraints = this.getConstraints(); // validating user inputs
+
+      var errors = validate_js__WEBPACK_IMPORTED_MODULE_0___default()(this.$data.book, constraints); // checking for errors
 
       if (errors) {
         this.errors = errors;
         return;
-      }
+      } //send the book data to the backend api
 
-      console.log(this.$data.book); //send the book data to the backend api
 
       axios.put("/api/books/".concat(this.$route.params.id), this.$data.book, {
         headers: {
@@ -2250,6 +2319,10 @@ __webpack_require__.r(__webpack_exports__);
         _this2.$data.backend_error = err.response.data;
       });
     },
+
+    /**
+     * defining validation constraints
+     */
     getConstraints: function getConstraints() {
       return {
         title: {
@@ -2318,6 +2391,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "view",
+
+  /**
+   * page attributes 
+   */
   data: function data() {
     return {
       book: null
@@ -2326,6 +2403,9 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
+    /**
+     * fetch book
+     */
     axios.get("/api/books/".concat(this.$route.params.id), {
       headers: {
         Authorization: "Bearer ".concat(this.currentUser.token)
@@ -2335,6 +2415,9 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
+    /**
+     * deleting book
+     */
     deleteBook: function deleteBook() {
       var _this2 = this;
 
@@ -2356,6 +2439,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   computed: {
+    /**
+     * getting current user
+     */
     currentUser: function currentUser() {
       return this.$store.getters.currentUser;
     }
@@ -2395,6 +2481,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
+/**
+ * defining home page
+ */
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'home'
 });
@@ -2420,6 +2510,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
+/**
+ * defining default landing page
+ */
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'main-app',
@@ -2483,15 +2577,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
+/**
+ * defining navigation
+ */
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'navbar',
   methods: {
+    /**
+     * logout current user
+     */
     logout: function logout() {
       this.$store.commit('logout');
       this.$router.push('/login');
     }
   },
   computed: {
+    /**
+     * getting current user
+     */
     currentUser: function currentUser() {
       return this.$store.getters.currentUser;
     }
@@ -2561,9 +2665,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+/**
+ * login component
+ */
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'login',
   data: function data() {
+    // defining attributes
     return {
       form: {
         email: '',
@@ -2573,19 +2682,27 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    /**
+     * authenticates user
+     */
     authenticate: function authenticate() {
       var _this = this;
 
-      this.errors = null;
-      var constraints = this.getConstraints();
-      var errors = validate_js__WEBPACK_IMPORTED_MODULE_2___default()(this.$data.form, constraints);
+      // ressetting errors to null
+      this.errors = null; // getting constraints
+
+      var constraints = this.getConstraints(); // validating user data
+
+      var errors = validate_js__WEBPACK_IMPORTED_MODULE_2___default()(this.$data.form, constraints); // checking for errors
 
       if (errors) {
         this.errors = errors;
         return;
-      }
+      } // calling login mutation
 
-      this.$store.dispatch('login');
+
+      this.$store.dispatch('login'); // login user
+
       Object(_helpers_auth__WEBPACK_IMPORTED_MODULE_0__["login"])(this.$data.form).then(function (res) {
         _this.$store.commit('loginSuccess', res);
 
@@ -2598,6 +2715,10 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     },
+
+    /**
+     * defining validation constraints
+     */
     getConstraints: function getConstraints() {
       return {
         email: {
@@ -2611,6 +2732,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   computed: {
+    /**
+     * getting authentication errors
+     */
     authError: function authError() {
       return this.$store.getters.authError;
     }
@@ -2682,8 +2806,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 
+/**
+ * defining register component
+ */
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'register',
+
+  /**
+   * defining attributes
+   */
   data: function data() {
     return {
       form: {
@@ -2697,31 +2829,39 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    /**
+     * handling uploaded image
+     */
     onFileChange: function onFileChange() {
       this.$data.passport_img = event.target.files[0];
     },
     register: function register() {
       var _this = this;
 
-      this.errors = null;
-      var constraints = this.getConstraints();
-      var errors = validate_js__WEBPACK_IMPORTED_MODULE_1___default()(this.$data.form, constraints);
+      // ressetting error to null
+      this.errors = null; // getting defined constraints
+
+      var constraints = this.getConstraints(); // validating user input
+
+      var errors = validate_js__WEBPACK_IMPORTED_MODULE_1___default()(this.$data.form, constraints); // checking for errors
 
       if (errors) {
         this.errors = errors;
         return;
-      }
+      } // adding user inputs to formdata
+
 
       var formData = new FormData();
       Object.keys(this.$data.form).forEach(function (key, index) {
         formData.append(key, _this.$data.form[key]);
-      });
+      }); // check for user photo
 
       if (this.$data.passport_img) {
         formData.append('passport_img', this.$data.passport_img, this.$data.passport_img.name);
-      }
+      } // call login mutation
 
-      this.$store.commit('login');
+
+      this.$store.commit('login'); // register new user
 
       Object(_helpers_auth__WEBPACK_IMPORTED_MODULE_0__["register"])(formData).then(function (res) {
         _this.$store.commit('loginSuccess', res);
@@ -2731,6 +2871,10 @@ __webpack_require__.r(__webpack_exports__);
         _this.$store.commit('loginFailed', error);
       });
     },
+
+    /**
+     * defining validation constraints
+     */
     getConstraints: function getConstraints() {
       return {
         name: {
@@ -2759,6 +2903,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   computed: {
+    /**
+     * getting authentication errors
+     */
     authError: function authError() {
       return this.$store.getters.authError;
     }
@@ -58294,6 +58441,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 
+/**
+ * login user
+ *
+ * @param {user input} credentials
+ * @returns Promise of loggedin user and token and stores them in localStorage
+ */
+
 function login(credentials) {
   return new Promise(function (res, rej) {
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/auth/login', credentials).then(function (response) {
@@ -58303,6 +58457,13 @@ function login(credentials) {
     });
   });
 }
+/**
+ * register user
+ *
+ * @param {user input} user_data
+ * @returns Promise of newly added user and token and stores them in localStorage
+ */
+
 function register(user_data) {
   return new Promise(function (res, rej) {
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/auth/register', user_data, {
@@ -58338,6 +58499,11 @@ function getLocalUser() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initialize", function() { return initialize; });
+/**
+ * defining routes that require authentication
+ * @param {stored data object} store
+ * @param {router} router
+ */
 function initialize(store, router) {
   router.beforeEach(function (to, from, next) {
     var requiresAuth = to.matched.some(function (record) {
@@ -58354,10 +58520,12 @@ function initialize(store, router) {
     }
   });
   axios.interceptors.response.use(null, function (error) {
+    // handing 401 status code
     if (error.response.status == 401) {
       store.commit('logout');
       router.push('/login');
-    }
+    } // forwarding request
+
 
     return Promise.reject(error);
   });
@@ -58394,7 +58562,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * defining all tha routes
+ * defining all the routes
  */
 
 var routes = [{
@@ -58447,7 +58615,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _helpers_auth__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers/auth */ "./resources/js/helpers/auth.js");
 
 var user = Object(_helpers_auth__WEBPACK_IMPORTED_MODULE_0__["getLocalUser"])();
+/**
+ * defining application state
+ */
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  /**
+   * application attibutes
+   */
   state: {
     currentUser: user,
     isLoggedIn: !!user,
@@ -58455,28 +58630,71 @@ var user = Object(_helpers_auth__WEBPACK_IMPORTED_MODULE_0__["getLocalUser"])();
     auth_error: null,
     books: []
   },
+
+  /**
+   * defining getters
+   */
   getters: {
+    /**
+     * getting the loading state
+     * @param {state} state
+     * @returns loading state
+     */
     isLoading: function isLoading(state) {
       return state.loading;
     },
+
+    /**
+     * getting the isLogged state
+     * @param {state} state
+     * @returns isLogged state
+     */
     isLoggedIn: function isLoggedIn(state) {
       return state.isLoggedIn;
     },
+
+    /**
+     * getting the currentUser state
+     * @param {state} state
+     * @returns currentUser state
+     */
     currentUser: function currentUser(state) {
       return state.currentUser;
     },
+
+    /**
+     * getting the authError state
+     * @param {state} state
+     * @returns authError state
+     */
     authError: function authError(state) {
       return state.auth_error;
     },
+
+    /**
+     * getting the books state
+     * @param {state} state
+     * @returns books state
+     */
     books: function books(state) {
       return state.books;
     }
   },
   mutations: {
+    /**
+     * redefining states for login
+     * @param {state} state
+     */
     login: function login(state) {
       state.loading = true;
       state.auth_error = null;
     },
+
+    /**
+     * redefining states for successfull login
+     * @param {state} state
+     * @param {server response} payload
+     */
     loginSuccess: function loginSuccess(state, payload) {
       state.auth_error = null;
       state.isLoggedIn = true;
@@ -58486,23 +58704,49 @@ var user = Object(_helpers_auth__WEBPACK_IMPORTED_MODULE_0__["getLocalUser"])();
       });
       localStorage.setItem('user', JSON.stringify(state.currentUser));
     },
+
+    /**
+     * redefining states for unsuccessfull login
+     * @param {state} state
+     * @param {server response} payload
+     */
     loginFailed: function loginFailed(state, payload) {
       state.loading = false;
       state.isLoggedIn = false, state.auth_error = payload.error;
     },
+
+    /**
+     * redefining states for unsuccessfull logout
+     * @param {state} state
+     */
     logout: function logout(state) {
       localStorage.removeItem("user");
       state.isLoggedIn = false;
       state.currentUser = null;
     },
+
+    /**
+     * redefining states for unsuccessfull login
+     * @param {state} state
+     * @param {server response} payload
+     */
     updateBooks: function updateBooks(state, payload) {
       state.books = payload;
     }
   },
   actions: {
+    /**
+     * commiting login mutation
+     * @param {context} context
+     */
     login: function login(context) {
       context.commit('login');
     },
+
+    /**
+     * getting all the books from the db
+     * @param {context} context
+     */
     getBooks: function getBooks(context) {
       axios.get('/api/books', {
         headers: {

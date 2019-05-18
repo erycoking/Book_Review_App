@@ -35,12 +35,18 @@
 <script>
 export default {
   name: "view",
+  /**
+   * page attributes 
+   */
   data() {
     return {
       book: null
     };
   },
   created() {
+    /**
+     * fetch book
+     */
     axios
       .get(`/api/books/${this.$route.params.id}`, {
         headers: {
@@ -52,6 +58,10 @@ export default {
       });
   },
   methods: {
+
+    /**
+     * deleting book
+     */
     deleteBook() {
       if (
         confirm(
@@ -75,6 +85,9 @@ export default {
     }
   },
   computed: {
+    /**
+     * getting current user
+     */
     currentUser() {
       return this.$store.getters.currentUser;
     }

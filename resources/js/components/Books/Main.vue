@@ -15,6 +15,9 @@
 
 
 <script>
+/**
+ * defining main componeny
+ */
 export default {
     name: 'books-main'
 }

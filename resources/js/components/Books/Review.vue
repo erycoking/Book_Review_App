@@ -55,6 +55,9 @@ import validate from 'validate.js';
 
 export default {
     name: 'new',
+    /**
+     * fetching book to be reviewed
+     */
     created() {
         axios.get(`/api/books/${this.$route.params.id}`, {
             headers: {
@@ -69,6 +72,9 @@ export default {
             this.$router.push(`${this.route.params.id}`);
         });
     },
+    /**
+     * defining page attributes
+     */
     data(){
         return {
             form: {
@@ -85,18 +91,27 @@ export default {
         };
     },
     computed: {
+        /**
+         * getting current user
+         */
         currentUser(){
             return this.$store.getters.currentUser;
         }
     },
     methods: {
+        /**
+         * saving review
+         */
         add() {
+            // ressetting errors
             this.errors = null;
+            // getting defined constraints
             const constraints = this.getConstraints();
 
+            // validating user inputs
             const errors = validate(this.$data.form, constraints);
-            console.log(errors);
 
+            // checking for errors
             if (errors){
                 this.errors = errors;
                 return;
@@ -115,6 +130,9 @@ export default {
                 this.$data.backend_error = err.response.data;
             });
         },
+        /**
+         * defining validation constraints
+         */
         getConstraints() {
             return {
                 rating: {

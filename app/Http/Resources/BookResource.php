@@ -14,8 +14,8 @@ class BookResource extends JsonResource
      */
     public function toArray($request)
     {
+        //  get current user
         $user = $this->user;
-        $user->passport_img = '/storage/passport_images/'.$this->user->passport_img;
 
         return [
             'id' => $this->id,
@@ -33,6 +33,7 @@ class BookResource extends JsonResource
 
     public function with($request)
     {
+        // adding links
         return [
             'links'=> [
                 'self'=> 'http://127.0.0.1:8000/books/'.$this->id,

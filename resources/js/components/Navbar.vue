@@ -43,15 +43,24 @@
 </template>
 
 <script>
+/**
+ * defining navigation
+ */
     export default {
         name: 'navbar',
         methods: {
+            /**
+             * logout current user
+             */
             logout() {
                 this.$store.commit('logout');
                 this.$router.push('/login')
             }
         },
         computed: {
+            /**
+             * getting current user
+             */
             currentUser(){
                 return this.$store.getters.currentUser
             }

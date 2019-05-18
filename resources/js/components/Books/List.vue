@@ -33,6 +33,9 @@
 
 
 <script>
+/**
+ * defining list component for displaying books
+ */
 export default {
     name: 'list',
     mounted() {
@@ -44,6 +47,9 @@ export default {
         }
     },
     computed: {
+        /**
+         * get all books in the database
+         */
         books(){
             return this.$store.getters.books;
         }

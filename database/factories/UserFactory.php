@@ -19,6 +19,14 @@ use App\Rating;
 |
 */
 
+/**
+ * generating fake users
+ *
+ * @param App\User User
+ * @param Faker\Generator $faker
+ *
+ * @return array new-fake-user
+ */
 $factory->define(User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
@@ -30,6 +38,14 @@ $factory->define(User::class, function (Faker $faker) {
     ];
 });
 
+/**
+ * generating fake Book
+ *
+ * @param App\Book Book
+ * @param Faker\Generator $faker
+ *
+ * @return array new-fake-book
+ */
 $factory->define(Book::class, function (Faker $faker) {
     return [
         'user_id'=> factory(User::class)->create()->id,
@@ -40,6 +56,14 @@ $factory->define(Book::class, function (Faker $faker) {
     ];
 });
 
+/**
+ * generating fake Rating
+ *
+ * @param App\Rating Rating
+ * @param Faker\Generator $faker
+ *
+ * @return array new-fake-rating
+ */
 $factory->define(Rating::class, function (Faker $faker) {
     return [
         'user_id'=> factory(User::class)->create()->id,

@@ -42,6 +42,9 @@ import validate from 'validate.js';
 
 export default {
     name: 'update',
+    /**
+     * fetching book to be updated
+     */
     created() {
         axios.get(`/api/books/${this.$route.params.id}`, {
             headers: {
@@ -60,6 +63,9 @@ export default {
             this.$router.push(`${this.route.params.id}`);
         });
     },
+    /**
+     * page attributes
+     */
     data(){
         return {
             book: {
@@ -72,22 +78,31 @@ export default {
         };
     },
     computed: {
+        /**
+         * getting current user
+         */
         currentUser(){
             return this.$store.getters.currentUser;
         }
     },
     methods: {
+        /**
+         * updating book
+         */
         save() {
+            // ressetting error
             this.errors = null;
+            // getting defined constraints
             const constraints = this.getConstraints();
 
+            // validating user inputs
             const errors = validate(this.$data.book, constraints);
 
+            // checking for errors
             if (errors){
                 this.errors = errors;
                 return;
             }
-            console.log(this.$data.book);
 
             //send the book data to the backend api
             axios.put(`/api/books/${this.$route.params.id}`, this.$data.book, {
@@ -102,6 +117,9 @@ export default {
                 this.$data.backend_error = err.response.data;
             });
         },
+        /**
+         * defining validation constraints
+         */
         getConstraints() {
             return {
                 title: {

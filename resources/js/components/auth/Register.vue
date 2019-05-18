@@ -51,8 +51,14 @@
 import { register } from '../../helpers/auth';
 import validate from 'validate.js';
 
+/**
+ * defining register component
+ */
 export default {
     name: 'register',
+    /**
+     * defining attributes
+     */
     data(){
         return {
             form: {
@@ -66,31 +72,42 @@ export default {
         }
     },
     methods: {
+        /**
+         * handling uploaded image
+         */
         onFileChange(){
             this.$data.passport_img = event.target.files[0];
         },
         register() {
+            // ressetting error to null
             this.errors = null;
+            // getting defined constraints
             const constraints = this.getConstraints();
 
+            // validating user input
             const errors = validate(this.$data.form, constraints);
 
+            // checking for errors
             if(errors){
                 this.errors = errors;
                 return;
             }
 
+            // adding user inputs to formdata
             const formData = new FormData();
             Object.keys(this.$data.form).forEach((key, index) =>{
                 formData.append(key, this.$data.form[key]);
             });
 
+            // check for user photo
             if(this.$data.passport_img){
                 formData.append('passport_img', this.$data.passport_img, this.$data.passport_img.name);
             }
 
+            // call login mutation
             this.$store.commit('login');
 
+            // register new user
             register(formData)
                 .then((res) => {
                     this.$store.commit('loginSuccess', res);
@@ -100,6 +117,9 @@ export default {
                     this.$store.commit('loginFailed', error);
                 });
         },
+        /**
+         * defining validation constraints
+         */
         getConstraints(){
             return {
                 name: {
@@ -128,6 +148,9 @@ export default {
         }
     },
     computed: {
+        /**
+         * getting authentication errors
+         */
         authError(){
             return this.$store.getters.authError;
         }

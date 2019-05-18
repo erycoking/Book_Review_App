@@ -47,6 +47,9 @@ import validate from 'validate.js';
 
 export default {
     name: 'new',
+    /**
+     * defining user attributes
+     */
     data(){
         return {
             book: {
@@ -60,30 +63,45 @@ export default {
         };
     },
     computed: {
+        /**
+         * getting current user
+         */
         currentUser(){
             return this.$store.getters.currentUser;
         }
     },
     methods: {
+        /**
+         * handling uploaded image
+         */
         onImageChange(){
             this.$data.cover_img = event.target.files[0];
         },
+        /**
+         * saving new book
+         */
         add() {
+            // ressetting errors
             this.errors = null;
+            // getting defined constraintss
             const constraints = this.getConstraints();
 
+            // validating user input
             const errors = validate(this.$data.book, constraints);
 
+            // checking for errors
             if (errors){
                 this.errors = errors;
                 return;
             }
 
+            // adding user inputs to formdata object
             const formData = new FormData();
             Object.keys(this.$data.book).forEach((key, index) =>{
                 formData.append(key, this.$data.book[key]);
             });
 
+            // checking for uploaded image
             if(this.$data.cover_img){
                 formData.append('cover_img', this.$data.cover_img, this.$data.cover_img.name);
             }
@@ -104,6 +122,9 @@ export default {
                 this.$data.backend_error = err.response.data;
             });
         },
+        /**
+         * defining validation constraints
+         */
         getConstraints() {
             return {
                 title: {

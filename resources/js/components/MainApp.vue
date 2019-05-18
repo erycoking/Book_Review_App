@@ -10,6 +10,9 @@
 <script>
     import navbar from './Navbar';
 
+    /**
+     * defining default landing page
+     */
     export default {
         name: 'main-app',
         components: {navbar}
