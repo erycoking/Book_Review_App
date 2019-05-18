@@ -33,7 +33,7 @@
                           <small id="cpasswordId" class="text-muted">Confirm your password</small>
                         </div>
                          <div class="form-group row">
-                          <label for="passport">Passport photo: </label>
+                          <label for="passport">Photo: </label>
                           <input type="file" accept="image/*"  id="passport" @change="onFileChange" class="form-control" aria-describedby="passportId">
                           <small id="passportId" class="text-muted">Upload passport photo</small>
                         </div>

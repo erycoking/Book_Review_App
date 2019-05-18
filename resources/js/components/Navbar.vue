@@ -8,7 +8,11 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-
+    <ul class="navbar-nav mr-auto" v-if="currentUser">
+        <li class="nav-item" >
+            <a href="#" class="nav-link">welcome {{ currentUser.name }}</a>
+        </li>
+    </ul>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
         <template v-if="!currentUser">
@@ -24,10 +28,11 @@
                 <router-link class="nav-link" to="/books">Books</router-link>
             </li>
             <li class="nav-item dropdown">
-                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
-                   welcome {{ currentUser.name }} <span class="caret"></span>
+                <a id="navbarDropdown" class="nav-link dropdown-toggle " href="#" role="button" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
+                    <img class="avater" :src="currentUser.passport_img">
+                    <span class="caret"></span>
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                     <a href="#!" @click.prevent="logout" class="dropdown-item">Logout</a>
                 </div>
             </li>
@@ -53,5 +58,15 @@
         }
     }
 </script>
+
+<style scoped>
+.avater {
+    widows: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+</style>
+
 
 

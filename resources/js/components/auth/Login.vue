@@ -28,6 +28,13 @@
                         <div class="form-group row">
                           <input type="submit" value="Login" class="btn btn-primary">
                         </div>
+                        <div class="form-group row">
+
+                          <router-link to="/register" class="ml-auto">
+                            <small class="text-muted">Don't have an account</small>
+                            Register
+                          </router-link>
+                        </div>
                     </form>
                 </div>
             </div>
